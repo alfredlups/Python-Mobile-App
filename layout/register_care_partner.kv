@@ -1,0 +1,158 @@
+<RegisterCarePartner>
+    name: "register-care-partner"
+
+    first_name: first_name
+    last_name: last_name
+    mobile_number: mobile_number
+    email: email
+    password: passw
+    street: street
+    city: city
+    state: state
+    zipcode: zipcode
+    male: male
+    female:female
+    birth_date: birth_date
+
+    MDFloatLayout:
+        cols: 1
+        MDFloatLayout:
+            size: root.width, root.height/2
+            MDIconButton:
+                icon: "arrow-left"
+                pos_hint: {"x":0.05, "y":.9}
+                size_hint: None, None
+                size: 50,50
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.clear_fields()
+                    app.back_to_front()
+
+            MDLabel:
+                text: "Register Care Partner"
+                halign: "center"
+                text_color: 0, 0, 1, 1
+                size_hint: 0.8, 0.1
+                pos_hint: {"x":0.1, "y":0.85}
+
+            MDTextField:
+                id: first_name
+                hint_text: "First Name"
+                pos_hint: {"x":0.1, "y":.77}
+                size_hint:0.8,None
+
+
+            MDTextField:
+                id: last_name
+                hint_text: "Last Name"
+                pos_hint: {"x":0.1, "y":.69}
+                size_hint:0.8,None
+
+            MDTextField:
+                id: street
+                hint_text: "Street"
+                pos_hint: {"x":0.1, "y":0.61}
+                size_hint:0.35,None
+
+            MDTextField:
+                id: city
+                hint_text: "City"
+                pos_hint: {"x":0.55, "y":0.61}
+                size_hint:0.35,None
+
+            MDTextField:
+                id: state
+                hint_text: "State"
+                pos_hint: {"x":0.1, "y":0.53}
+                size_hint:0.35,None
+                max_text_length: 2
+                helper_text_mode: "on_error"
+                helper_text: "Should be 2 letters only"
+                text_length: 2
+
+            MDTextField:
+                id: zipcode
+                hint_text: "Zipcode"
+                pos_hint: {"x":0.55, "y":0.53}
+                size_hint:0.35,None
+                input_filter: 'int'
+
+            MDLabel:
+                text: "Gender:"
+                theme_text_color: "Custom"
+                text_color: 128,128,128,1
+                size_hint: 0.8, 0.1
+                pos_hint: {"x":0.1, "y":0.46}
+
+            MDLabel:
+                text: "Male"
+                theme_text_color: "Custom"
+                text_color: 128,128,128,1
+                size_hint: 0.8, 0.1
+                pos_hint: {"x":0.26, "y":0.46}
+
+            MDLabel:
+                text: "Female"
+                theme_text_color: "Custom"
+                text_color: 128,128,128,1
+                size_hint: 0.8, 0.1
+                pos_hint: {"x":0.5, "y":0.46}
+
+            Check:
+                id: male
+                pos_hint: {'center_x': .4, 'center_y': .51}
+
+            Check:
+                id: female
+                pos_hint: {'center_x': .68, 'center_y': .51}
+
+            DateTextField:
+                id: birth_date
+                hint_text: "Birth Date"
+                pos_hint: {"x":0.1, "y":0.41}
+                size_hint:0.8,None
+                readonly: True
+
+            MDTextField:
+                id: mobile_number
+                hint_text: "Mobile Number"
+                pos_hint: {"x":0.1, "y":0.33}
+                size_hint:0.8,None
+                input_filter: 'int'
+
+            MDTextField:
+                id: email
+                hint_text: "Email Address"
+                pos_hint: {"x":0.1, "y":0.25}
+                size_hint:0.8,None
+
+            MDTextField:
+                id: passw
+                hint_text: "Password"
+                pos_hint: {"x":0.1, "y":0.17}
+                size_hint:0.8,None
+                password: True
+                min_length: 4
+
+            MDIconButton:
+                icon: "eye-off"
+                ripple_scale: .5
+                pos_hint: {"x":0.8, "y":0.18}
+                on_release:
+                    self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+                    passw.password = False if passw.password is True else True
+
+            MDRaisedButton:
+                text: "REGISTER"
+                font_size: 17
+                pos_hint: {"x":0.075, "y":.07}
+                size_hint: 0.85, 0.07
+                on_release:
+                    root.manager.transition.direction = "down"
+                    root.register()
+
+<Check@MDCheckbox>:
+    group: 'group'
+    size_hint: None, None
+    size: dp(48), dp(48)
+

@@ -1,0 +1,44 @@
+<Login>
+    name: "login"
+
+    email: email
+    password: passw
+
+    MDFloatLayout:
+        cols:1
+        MDFloatLayout:
+            id: login_section
+            size: root.width, root.height/2
+            MDIconButton:
+                icon: "arrow-right"
+                pos_hint: {"x":0.8, "y":.9}
+                size_hint: None, None
+                size: 50,50
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.clear_login_fields()
+                    app.back_to_front()
+            Image:
+                source: 'images/phscp_new_logo.png'
+                size_hint: None, None
+                size: 200,225
+                pos_hint: {"center_x":0.5, "center_y":.65}
+            MDTextField:
+                id: email
+                hint_text: "Email"
+                pos_hint: {"x":0.1, "top":.45}
+                size_hint: 0.8, None
+            MDTextField:
+                id: passw
+                hint_text: "Password"
+                pos_hint: {"x":0.1, "top":.37}
+                size_hint: 0.8, None
+                password: True
+            MDRaisedButton:
+                text: "LOGIN"
+                font_size: 17
+                pos_hint: {"x":0.075, "top":.27}
+                size_hint: 0.85, 0.07
+                on_release:
+                    root.manager.transition.direction = "down"
+                    root.login ()

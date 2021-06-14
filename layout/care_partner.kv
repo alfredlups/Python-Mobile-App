@@ -1,0 +1,866 @@
+<CarePartner>:
+    name: "care-partner"
+
+    #summary
+    summary: summary
+
+    #skills
+    #sk_grid: sk_grid.__self__
+    new_skill: new_skill
+    new_current_skill: new_current_skill
+
+    #work-experience
+    my_position: my_position
+    my_company: my_company
+    my_address: my_address
+    my_is_current: my_is_current
+    my_from_date: my_from_date
+    my_to_date: my_to_date
+    my_description: my_description
+
+    #education
+    my_school: my_school
+    my_degree: my_degree
+    my_field: my_field
+    my_start_date: my_start_date
+    my_end_date: my_end_date
+
+    #build_profile_btn: build_profile_btn
+
+    #edit summary
+    edit_summary: edit_summary
+
+    BoxLayout:
+        orientation: 'vertical'
+        MDToolbar:
+            id: tool_bar
+            title: "Home"
+            elevation: 0
+            left_action_items: [['menu', lambda x: nav_drawer.toggle_nav_drawer()]]
+            right_action_items: [["dots-vertical", lambda x: nav_drawer.toggle_nav_drawer()]]
+        Widget:
+    NavigationLayout:
+        ScreenManager:
+            id: screen_manager
+            Screen:
+                name: "home"
+                MDFloatLayout:
+                    orientation: "vertical"
+                    pos_hint_y: 0.8
+                    id: home_section
+                    MDLabel:
+                        text: "Please wait..."
+                        halign: "center"
+            Screen:
+                name: "build-profile"
+                MDFloatLayout:
+                    cols: 1
+                    orientation: "vertical"
+                    MDIconButton:
+                        icon: "arrow-right"
+                        pos_hint: {"x":0.85, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.transition.direction = "left"
+                            root.skills_step()
+                    MDLabel:
+                        text: "Professional Summary"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.6}
+                    MDTextField:
+                        id: summary
+                        hint_text: "Write summary here"
+                        height: "300dp"
+                        multiline: True
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.35}
+                        max_text_length: 200
+                        helper_text_mode: "on_error"
+                        helper_text: "Maximum of 200 letters only"
+                    MDRaisedButton:
+                        text: "Save"
+                        pos_hint: {"center_x":0.5, "y":0.25}
+                        on_release:
+                            root.add_summary()
+            Screen:
+                name: "skills"
+                MDFloatLayout:
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.02, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.current = "build-profile"
+                            screen_manager.transition.direction = "right"
+                    MDIconButton:
+                        icon: "arrow-right"
+                        pos_hint: {"x":0.85, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.transition.direction = "left"
+                            root.work_experience_step()
+                    MDLabel:
+                        text: "Skills"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.6}
+                    MDLabel:
+                        text: "Do you have any of these skills below?"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.56}
+                    StackLayout:
+                        pos_hint: {"x":0.08, "top": 0.72}
+                        spacing: dp(5)
+                        id: md_chip
+
+                    MDTextField:
+                        id: new_skill
+                        hint_text: "Add new skill"
+                        pos_hint: {"x":0.1, "top":.55}
+                        size_hint_x: 0.6
+                        mode: "rectangle"
+                        on_text:
+                            root.typing_skills(self.text, 'add')
+                    MDRaisedButton:
+                        text: "add"
+                        pos_hint: {"x":0.75, "top":.53}
+                        on_release:
+                            root.add_new_skills('add')
+                    BoxLayout:
+                        pos_hint: {"x":0.1, "top":0.45}
+                        size_hint: 0.8, 0.4
+                        ScrollView:
+                            MDList:
+                                id: skills_list
+            Screen:
+                name: "work-experience"
+                MDFloatLayout:
+                    id: build_work_experience_section
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.02, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.current = "skills"
+                            screen_manager.transition.direction = "right"
+                    MDIconButton:
+                        icon: "arrow-right"
+                        pos_hint: {"x":0.85, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.transition.direction = "left"
+                            root.education_step()
+                    MDLabel:
+                        text: "Working Experience"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.6}
+                    MDDropDownItem:
+                        id: bp_position
+                        pos_hint: {"x":0.1, "top":.75}
+                        size_hint_x: 0.8
+                        text: 'Job Title'
+                        on_release:
+                            root.bp_position_menu.open()
+                    MDDropDownItem:
+                        id: bp_company
+                        pos_hint: {"x":0.1, "top":.67}
+                        size_hint_x: 0.8
+                        text: 'Company'
+                        on_release:
+                            root.bp_company_menu.open()
+                    MDTextField:
+                        id: bp_address
+                        hint_text: "State"
+                        max_text_length: 2
+                        helper_text_mode: "on_error"
+                        helper_text: "Should be 2 letters only"
+                        pos_hint: {"x":0.1, "top":.59}
+                        size_hint_x: 0.8
+                    MDLabel:
+                        text: "I am curently work here"
+                        halign: "center"
+                        pos_hint: {'center_x': .37, 'center_y': .47}
+                    MDCheckbox:
+                        id: bp_is_current
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        pos_hint: {'center_x': .12, 'center_y': .47}
+                        on_active:
+                            root.on_work_status(*args, 'bp')
+                    DateMDTextField:
+                        id: bp_from_date
+                        hint_text: "Start Date"
+                        pos_hint: {"x":0.1, "top":.43}
+                        size_hint_x: 0.8
+                    DateMDTextField:
+                        id: bp_to_date
+                        hint_text: "End Date"
+                        pos_hint: {"x":0.1, "top":.35}
+                        size_hint_x: 0.8
+                        on_focus:
+                            root.show_to_date_picker('bp-work')
+                    MDTextField:
+                        id: bp_description
+                        hint_text: "Description"
+                        pos_hint: {"x":0.1, "top":.27}
+                        size_hint_x: 0.8
+                    MDRaisedButton:
+                        text: "Save"
+                        pos_hint: {"center_x":0.5, "center_y":0.12}
+                        on_release:
+                            root.add_bp_work_experience()
+
+            Screen:
+                name: "education"
+                MDFloatLayout:
+                    id: build_education_section
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.02, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.current = "work-experience"
+                            screen_manager.transition.direction = "right"
+                    MDLabel:
+                        text: "Education"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.6}
+                    MDDropDownItem:
+                        id: bp_school
+                        text: "School"
+                        pos_hint: {"x":0.1, "top":.75}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.bp_school_menu.open()
+                    MDDropDownItem:
+                        id: bp_degree
+                        text: "Degree"
+                        pos_hint: {"x":0.1, "top":.67}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.bp_degree_menu.open()
+                    MDDropDownItem:
+                        id: bp_field
+                        text: "Field"
+                        pos_hint: {"x":0.1, "top":.59}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.bp_field_menu.open()
+                    DateMDTextField:
+                        id: bp_start_date
+                        hint_text: "Start date"
+                        pos_hint: {"x":0.1, "top":.51}
+                        size_hint_x: 0.8
+                    DateMDTextField:
+                        id: bp_end_date
+                        hint_text: "End date"
+                        pos_hint: {"x":0.1, "top":.43}
+                        size_hint_x: 0.8
+                    MDRaisedButton:
+                        text: "Save"
+                        pos_hint: {"center_x":0.5, "center_y":0.2}
+                        on_release:
+                            root.add_education()
+            Screen:
+                name: "profile"
+                MDFloatLayout:
+                    id: profile_picture
+                    pos_hint: {'center_x':.5,'center_y':.81}
+                    size_hint: None,None
+                    width: 125
+                    height: 125
+                    Image:
+                        id: avatar
+                        source: 'images/avatar.jpg'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+                BoxLayout:
+                    pos_hint: {"x":0, "top":0.72}
+                    ScrollView:
+                        MDList:
+                            MDSeparator:
+                                height: "5dp"
+                            ThreeLineAvatarIconListItem:
+                                id: section_personal_profile
+                                text: "Personal Information"
+                                secondary_text: "Web Developer at Splash Cyfusions"
+                                tertiary_text: "fit more text than usual"
+                                IconLeftWidget:
+                                    icon: "pencil"
+                                    on_release:
+                                        screen_manager.current = "edit-profile"
+                                        screen_manager.transition.direction = "left"
+                                        root.update_toolbar_label("Edit Personal Information")
+                                        root.load_user_edit_info()
+                            MDSeparator:
+                                height: "5dp"
+                            TwoLineAvatarIconListItem:
+                                id: section_summary
+                                pos_hint: {"x":0.5,"top":0.5}
+                                text: "Professional Summary"
+                                secondary_text: "Secondary text here"
+                                IconLeftWidget:
+                                    icon: "pencil"
+                                    on_release:
+                                        screen_manager.current = "edit-summary"
+                                        root.update_toolbar_label("Edit Summary")
+                                        screen_manager.transition.direction = "left"
+                            MDSeparator:
+                                height: "5dp"
+                            TwoLineAvatarIconListItem:
+                                id: section_skills
+                                text: "Skills"
+                                secondary_text: "Secondary text here"
+                                IconLeftWidget:
+                                    icon: "pencil"
+                                    on_release:
+                                        root.update_toolbar_label('Edit Skills')
+                                        screen_manager.current = "edit-skills"
+                                        screen_manager.transition.direction = "left"
+                            MDSeparator:
+                                height: "5dp"
+                            ThreeLineAvatarIconListItem:
+                                id: section_work_experience
+                                text: "Work Experience"
+                                secondary_text: "Secondary text here"
+                                IconLeftWidget:
+                                    icon: "pencil"
+                                    on_release:
+                                        root.get_all_work_experience()
+                                        screen_manager.current = "edit-work-experience"
+                                        screen_manager.transition.direction = "left"
+                            MDSeparator:
+                                height: "5dp"
+                            ThreeLineAvatarIconListItem:
+                                id: section_education
+                                text: "Education"
+                                secondary_text: "University of California"
+                                tertiary_text: "Bachelor of Science in Nursing"
+                                IconLeftWidget:
+                                    icon: "pencil"
+                                    on_release:
+                                        root.get_all_education()
+                                        screen_manager.current = "edit-education"
+                                        screen_manager.transition.direction = "left"
+                            MDSeparator:
+                                height: "5dp"
+            Screen:
+                name: "edit-profile"
+                MDFloatLayout:
+                    orientation: "vertical"
+                    MDFloatLayout:
+                        MDIconButton:
+                            icon: "arrow-left"
+                            pos_hint: {"x":0.05, "y":.83}
+                            size_hint: None, None
+                            size: 50,50
+                            on_release:
+                                screen_manager.current = "profile"
+                                screen_manager.transition.direction = "right"
+                                root.load_profile_details()
+                        MDTextField:
+                            id: edit_first_name
+                            hint_text: "First Name"
+                            pos_hint: {"x":0.1, "y":.75}
+                            size_hint:0.8,None
+                        MDTextField:
+                            id: edit_last_name
+                            hint_text: "Last Name"
+                            pos_hint: {"x":0.1, "y":.67}
+                            size_hint:0.8,None
+                        MDTextField:
+                            id: edit_street
+                            hint_text: "Street"
+                            pos_hint: {"x":0.1, "y":0.59}
+                            size_hint:0.35,None
+                        MDTextField:
+                            id: edit_city
+                            hint_text: "City"
+                            pos_hint: {"x":0.55, "y":0.59}
+                            size_hint:0.35,None
+                        MDTextField:
+                            id: edit_state
+                            hint_text: "State"
+                            pos_hint: {"x":0.1, "y":0.51}
+                            size_hint:0.35,None
+                            max_text_length: 2
+                            helper_text_mode: "on_error"
+                            helper_text: "Should be 2 letters only"
+                        MDTextField:
+                            id: edit_zipcode
+                            hint_text: "Zipcode"
+                            pos_hint: {"x":0.55, "y":0.51}
+                            size_hint:0.35,None
+                            input_filter: 'int'
+                        MDTextField:
+                            id: edit_mobile_number
+                            hint_text: "Mobile Number"
+                            pos_hint: {"x":0.1, "y":0.43}
+                            size_hint:0.8,None
+                            input_filter: 'int'
+                        MDTextField:
+                            id: edit_email
+                            hint_text: "Email Address"
+                            pos_hint: {"x":0.1, "y":0.35}
+                            size_hint:0.8,None
+                        MDTextField:
+                            id: edit_password
+                            hint_text: "Password"
+                            pos_hint: {"x":0.1, "y":.27}
+                            size_hint:0.8,None
+                            password: True
+                        MDIconButton:
+                            icon: "eye-off"
+                            ripple_scale: .5
+                            pos_hint: {"x":0.8, "y":0.28}
+                            on_release:
+                                self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+                                edit_password.password = False if edit_password.password is True else True
+                        MDRaisedButton:
+                            text: "Update"
+                            font_size: (root.width**2 + root.height**2) / 14**4
+                            pos_hint: {"center_x":0.5, "y":.15}
+                            on_release:
+                                root.update_user_info()
+            Screen:
+                name: "edit-summary"
+                MDFloatLayout:
+                    orientation: "vertical"
+                    MDFloatLayout:
+                        MDIconButton:
+                            icon: "arrow-left"
+                            pos_hint: {"x":0.05, "y":.83}
+                            size_hint: None, None
+                            size: 50,50
+                            on_release:
+                                root.load_profile_details()
+                                screen_manager.current = "profile"
+                                screen_manager.transition.direction = "right"
+                        MDTextField:
+                            id: edit_summary
+                            hint_text: "Write summary here"
+                            multiline: True
+                            size_hint: 0.8, 0.3
+                            pos_hint: {"x":0.1, "y":0.5}
+                            max_text_length: 200
+                            helper_text_mode: "on_error"
+                            helper_text: "Maximum of 200 letters only"
+                        MDRaisedButton:
+                            text: "Update"
+                            font_size: (root.width**2 + root.height**2) / 14**4
+                            pos_hint: {"x":0.075, "y":.4}
+                            size_hint: 0.85, 0.07
+                            on_release:
+                                root.update_summary()
+            Screen:
+                name: "edit-skills"
+                MDFloatLayout:
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.05, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            root.load_profile_details()
+                            screen_manager.current = "profile"
+                            screen_manager.transition.direction = "right"
+                    MDLabel:
+                        text: "Skills"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.6}
+                    MDLabel:
+                        text: "Do you have any of these skills below?"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.56}
+                    StackLayout:
+                        pos_hint: {"x":0.03, "top": 0.72}
+                        spacing: dp(5)
+                        id: sk_chip
+                    MDTextField:
+                        id: new_current_skill
+                        hint_text: "Add new skill"
+                        pos_hint: {"x":0.1, "top":.55}
+                        size_hint_x: 0.6
+                        mode: "rectangle"
+                        on_text:
+                            root.typing_skills(self.text, 'edit')
+                    MDRaisedButton:
+                        text: "add"
+                        pos_hint: {"x":0.75, "top":.53}
+                        on_release:
+                            root.add_new_skills('edit')
+                    BoxLayout:
+                        pos_hint: {"x":0.1, "top":0.45}
+                        size_hint: 0.8, 0.4
+                        ScrollView:
+                            MDList:
+                                id: new_skills_list
+            Screen:
+                name: "edit-education"
+                MDFloatLayout:
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.05, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            root.load_profile_details()
+                            screen_manager.current = "profile"
+                            screen_manager.transition.direction = "right"
+                    MDIconButton:
+                        icon: "plus"
+                        pos_hint: {"x":0.85, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            screen_manager.current = "add-new-education"
+                            screen_manager.transition.direction = "left"
+                            root.update_toolbar_label('Add New Education')
+                    BoxLayout:
+                        pos_hint: {"x":0, "top":0.83}
+                        ScrollView:
+                            MDList:
+                                id: education_list
+            Screen:
+                name: "add-new-education"
+                MDFloatLayout:
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.05, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            root.get_all_education()
+                            root.clear_education_fields()
+                            screen_manager.current = "edit-education"
+                            screen_manager.transition.direction = "right"
+                    MDDropDownItem:
+                        id: my_school
+                        text: "School"
+                        pos_hint: {"x":0.1, "top":.75}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.school_menu.open()
+                    MDDropDownItem:
+                        id: my_degree
+                        text: "Degree"
+                        pos_hint: {"x":0.1, "top":.67}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.degree_menu.open()
+                    MDDropDownItem:
+                        id: my_field
+                        text: "Field"
+                        pos_hint: {"x":0.1, "top":.59}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.field_menu.open()
+                    DateMDTextField:
+                        id: my_start_date
+                        hint_text: "Start date"
+                        pos_hint: {"x":0.1, "top":.51}
+                        size_hint_x: 0.8
+                    DateMDTextField:
+                        id: my_end_date
+                        hint_text: "End date"
+                        pos_hint: {"x":0.1, "top":.43}
+                        size_hint_x: 0.8
+                    MDRaisedButton:
+                        text: "Save"
+                        pos_hint: {"center_x":0.5, "center_y":0.2}
+                        on_release:
+                            root.add_new_education()
+
+            Screen:
+                name: "edit-specific-education"
+                MDFloatLayout:
+                    size: root.width, root.height/2
+                    MDIconButton:
+                        icon: "arrow-left"
+                        pos_hint: {"x":0.05, "y":.83}
+                        size_hint: None, None
+                        size: 50,50
+                        on_release:
+                            root.get_all_education()
+                            screen_manager.current = "edit-education"
+                            screen_manager.transition.direction = "right"
+                    MDDropDownItem:
+                        id: edit_school
+                        text: "School"
+                        pos_hint: {"x":0.1, "top":.75}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.edit_school_menu.open()
+                    MDDropDownItem:
+                        id: edit_degree
+                        text: "Degree"
+                        pos_hint: {"x":0.1, "top":.67}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.edit_degree_menu.open()
+                    MDDropDownItem:
+                        id: edit_field
+                        text: "Field"
+                        pos_hint: {"x":0.1, "top":.59}
+                        size_hint_x: 0.8
+                        on_release:
+                            root.edit_field_menu.open()
+                    DateMDTextField:
+                        id: edit_start_date
+                        hint_text: "Start date"
+                        pos_hint: {"x":0.1, "top":.51}
+                        size_hint_x: 0.8
+                    DateMDTextField:
+                        id: edit_end_date
+                        hint_text: "End date"
+                        pos_hint: {"x":0.1, "top":.43}
+                        size_hint_x: 0.8
+                    MDRaisedButton:
+                        text: "Update"
+                        pos_hint: {"center_x":0.5, "center_y":0.3}
+                        on_release:
+                            root.update_education()
+
+            Screen:
+                name: "edit-work-experience"
+                MDIconButton:
+                    icon: "arrow-left"
+                    pos_hint: {"x":0.03, "y":.83}
+                    size_hint: None, None
+                    size: 50,50
+                    on_release:
+                        root.load_profile_details()
+                        screen_manager.current = "profile"
+                        screen_manager.transition.direction = "right"
+                MDIconButton:
+                    icon: "plus"
+                    pos_hint: {"x":0.85, "y":.83}
+                    size_hint: None, None
+                    size: 50,50
+                    on_release:
+                        screen_manager.current = "add-new-work-experience"
+                        screen_manager.transition.direction = "left"
+                        root.update_toolbar_label('Add new Work Experience')
+                BoxLayout:
+                    pos_hint: {"x":0, "top":0.83}
+                    ScrollView:
+                        MDList:
+                            id: work_list
+            Screen:
+                name: "add-new-work-experience"
+                MDIconButton:
+                    icon: "arrow-left"
+                    pos_hint: {"x":0.03, "y":.83}
+                    size_hint: None, None
+                    size: 50,50
+                    on_release:
+                        screen_manager.current = "edit-work-experience"
+                        screen_manager.transition.direction = "right"
+                        root.clear_work_experience_fields()
+                        root.get_all_work_experience()
+                MDDropDownItem:
+                    id: my_position
+                    pos_hint: {"x":0.1, "top":.75}
+                    size_hint_x: 0.8
+                    text: 'Job Title'
+                    on_release:
+                        root.position_menu.open()
+                MDDropDownItem:
+                    id: my_company
+                    pos_hint: {"x":0.1, "top":.67}
+                    size_hint_x: 0.8
+                    text: 'Company'
+                    on_release:
+                        root.company_menu.open()
+                MDTextField:
+                    id: my_address
+                    hint_text: "State"
+                    max_text_length: 2
+                    helper_text_mode: "on_error"
+                    helper_text: "Should be 2 letters only"
+                    pos_hint: {"x":0.1, "top":.59}
+                    size_hint_x: 0.8
+                MDLabel:
+                    text: "I am curently work here"
+                    halign: "center"
+                    pos_hint: {'center_x': .37, 'center_y': .47}
+                MDCheckbox:
+                    id: my_is_current
+                    size_hint: None, None
+                    size: "48dp", "48dp"
+                    pos_hint: {'center_x': .12, 'center_y': .47}
+                    on_active:
+                        root.on_work_status(*args,'new')
+                DateMDTextField:
+                    id: my_from_date
+                    hint_text: "Start Date"
+                    pos_hint: {"x":0.1, "top":.43}
+                    size_hint_x: 0.8
+                DateMDTextField:
+                    id: my_to_date
+                    hint_text: "End Date"
+                    pos_hint: {"x":0.1, "top":.35}
+                    size_hint_x: 0.8
+                MDTextField:
+                    id: my_description
+                    hint_text: "Description"
+                    pos_hint: {"x":0.1, "top":.27}
+                    size_hint_x: 0.8
+                MDRaisedButton:
+                    text: "Save"
+                    pos_hint: {"center_x":0.5, "center_y":0.12}
+                    on_release:
+                        root.add_work_experience()
+
+            Screen:
+                name: "edit-specific-work-experience"
+                MDIconButton:
+                    icon: "arrow-left"
+                    pos_hint: {"x":0.03, "y":.83}
+                    size_hint: None, None
+                    size: 50,50
+                    on_release:
+                        screen_manager.current = "edit-work-experience"
+                        screen_manager.transition.direction = "right"
+                        root.get_all_work_experience()
+                MDFloatLayout:
+                    size: root.width, root.height/2
+                    MDDropDownItem:
+                        id: edit_position
+                        pos_hint: {"x":0.1, "top":.75}
+                        size_hint_x: 0.8
+                        text: 'Job Title'
+                        on_release:
+                            root.edit_position_menu.open()
+                    MDDropDownItem:
+                        id: edit_company
+                        pos_hint: {"x":0.1, "top":.67}
+                        size_hint_x: 0.8
+                        text: 'Company'
+                        on_release:
+                            root.edit_company_menu.open()
+                    MDTextField:
+                        id: edit_address
+                        hint_text: "State"
+                        max_text_length: 2
+                        helper_text_mode: "on_error"
+                        helper_text: "Should be 2 letters only"
+                        pos_hint: {"x":0.1, "top":.59}
+                        size_hint_x: 0.8
+                    MDLabel:
+                        text: "I am curently work here"
+                        halign: "center"
+                        pos_hint: {'center_x': .37, 'center_y': .47}
+                    MDCheckbox:
+                        id: edit_is_current
+                        size_hint: None, None
+                        size: "48dp", "48dp"
+                        pos_hint: {'center_x': .12, 'center_y': .47}
+                        on_active:
+                            root.on_work_status(*args,'edit')
+                    DateMDTextField:
+                        id: edit_from_date
+                        hint_text: "Start Date"
+                        pos_hint: {"x":0.1, "top":.43}
+                        size_hint_x: 0.8
+                    DateMDTextField:
+                        id: edit_to_date
+                        hint_text: "End Date"
+                        pos_hint: {"x":0.1, "top":.35}
+                        size_hint_x: 0.8
+                    MDTextField:
+                        id: edit_description
+                        hint_text: "Description"
+                        pos_hint: {"x":0.1, "top":.27}
+                        size_hint_x: 0.8
+                    MDRaisedButton:
+                        text: "Update"
+                        pos_hint: {"center_x":0.5, "center_y":0.12}
+                        on_release:
+                            root.update_work_experience()
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+                orientation: "vertical"
+                padding: "8dp"
+                spacing: "8dp"
+                AnchorLayout:
+                    id: side_profile_picture
+                    size_hint: None,None
+                    theme_bg_color: "Custom"
+                    md_bg_color: 0,0,0,1
+                    width: 70
+                    height: 70
+                    Image:
+                        id: side_avatar
+                        source: 'images/avatar.jpg'
+                        center_x: self.parent.center_x
+                        center_y: self.parent.center_y
+
+                MDLabel:
+                    id: side_full_name
+                    text: "KivyMD library"
+                    font_style: "Button"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: side_email
+                    text: "kivydevelopment@gmail.com"
+                    font_style: "Caption"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                ScrollView:
+                    MDList:
+                        id: md_list
+                        MDSeparator:
+                        OneLineIconListItem:
+                            text: "Home"
+                            on_release:
+                                screen_manager.current = "home"
+                                root.update_toolbar_label("Home")
+                                screen_manager.transition.direction = "left"
+                                nav_drawer.toggle_nav_drawer()
+                            IconLeftWidget:
+                                icon: "home"
+                        OneLineIconListItem:
+                            text: "Profile"
+                            on_release:
+                                screen_manager.current = root.profile_link()
+                                root.change_toolbar_label()
+                                screen_manager.transition.direction = "left"
+                                nav_drawer.toggle_nav_drawer()
+                            IconLeftWidget:
+                                icon: "account-circle"
+                        OneLineIconListItem:
+                            text: "Logout"
+                            on_release:
+                                root.update_toolbar_label("Home")
+                                app.logout()
+                                root.do_logout()
+                                nav_drawer.toggle_nav_drawer()
+                                screen_manager.transition.direction = "down"
+                            IconLeftWidget:
+                                icon: "logout"
+

@@ -1,0 +1,114 @@
+<Patient>:
+    name: "patient"
+
+    #on enter
+    first_name: first_name
+    email: email
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: "Patient"
+            elevation: 10
+            left_action_items: [['menu', lambda x: nav_drawer.toggle_nav_drawer()]]
+        Widget:
+    NavigationLayout:
+
+        ScreenManager:
+            id: screen_manager
+            Screen:
+                name: "home"
+                MDFloatLayout:
+                    orientation: "vertical"
+                    pos_hint_y: 0.8
+                    MDLabel:
+                        text: "Dashboard"
+                        halign: "center"
+            Screen:
+                name: "care-partner"
+                MDBoxLayout:
+                    cols: 1
+                    orientation: "vertical"
+                    size_hint_x: 0.8
+                    pos_hint: {"x":0.1, "top":0.9}
+                    MDLabel:
+                        text: "List of Care Partners"
+                        halign: "center"
+                        size_hint: 0.8, 0.4
+                        pos_hint: {"x":0.1, "y":0.6}
+                    ScrollView:
+                        MDList:
+                            id: cp_list
+
+            Screen:
+                name: "care-partners-profile"
+                MDFloatLayout:
+                    orientation: "vertical"
+                    pos_hint_y: 0.8
+                    MDLabel:
+                        id: cp_current
+                        text: "Care Partners Profile"
+                        halign: "center"
+
+            Screen:
+                name: "patients"
+                MDLabel:
+                    text: "List of Patients"
+                    pos_hint: {"x":0.5, "top":0.3}
+                MDTextField:
+                    id: first_name
+                    pos_hint: {"x":0.1, "top":.82}
+                    size_hint: 0.8, 0.1
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            type: "standard"
+            ContentNavigationDrawer:
+                screen_manager: screen_manager
+                nav_drawer: nav_drawer
+                orientation: "vertical"
+                padding: "8dp"
+                spacing: "8dp"
+                AnchorLayout:
+                    anchor_x: "left"
+                    size_hint_y: None
+                    height: avatar.height
+
+                    Image:
+                        id: avatar
+                        size_hint: None, None
+                        size: "56dp", "56dp"
+                        source: "data/logo/kivy-icon-256.png"
+
+                MDLabel:
+                    id: first_name
+                    text: "KivyMD library"
+                    font_style: "Button"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    id: email
+                    text: "kivydevelopment@gmail.com"
+                    font_style: "Caption"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                ScrollView:
+
+                    MDList:
+                        id: md_list
+                        OneLineListItem:
+                            text: "Find Care Partner"
+                            on_release:
+                                screen_manager.current = "care-partner"
+                                root.load_care_partners()
+                        OneLineListItem:
+                            text: "Patients"
+                            on_release:
+                                screen_manager.current = "patients"
+
+                        OneLineListItem:
+                            text: "Logout"
+

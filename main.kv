@@ -1,0 +1,47 @@
+#:include layout/login.kv
+#:include layout/register_patient.kv
+#:include layout/register_care_partner.kv
+#:include layout/patient.kv
+#:include layout/care_partner.kv
+<Front>:
+    name: "front"
+    MDFloatLayout:
+        cols:1
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'images/purple_bg.png'
+        MDFloatLayout:
+            Image:
+                id: front_logo
+                source: 'images/main_logo.png'
+                size_hint: None, None
+                size: 200,225
+                pos_hint: {"center_x":0.5, "center_y":.65}
+
+            MDRectangleFlatButton:
+                text: "CARE PARTNER"
+                font_size: 17
+                pos_hint: {"center_x":0.5, "y":.18}
+                size_hint: 0.4, 0.06
+                text_color: 1,1,1,1
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.care_partner_registration()
+
+            MDRectangleFlatButton:
+                text: "LOGIN"
+                font_size: 17
+                pos_hint: {"center_x":0.5, "y":.10}
+                size_hint: 0.4, 0.06
+                back_color: (255,255,255,1)
+                canvas.before:
+                    Color:
+                        rgba: self.back_color
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                on_release:
+                    root.manager.transition.direction = "right"
+                    root.go_to_login()
